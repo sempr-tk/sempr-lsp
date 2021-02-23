@@ -5,8 +5,11 @@ from pygls.server import LanguageServer
 from pygls.types import *
 from pygls.workspace import *
 
+import semprlsp
+
 import sys
 
+ruleChecker = semprlsp.RuleChecker()
 server = LanguageServer()
 
 @server.feature(COMPLETION, trigger_characters=[','])
@@ -18,30 +21,38 @@ def completions(params: CompletionParams):
     ])
 
 
+
+def get_diagnostics(rules):
+    errs = ruleChecker.getErrors(rules)
+    dias = []
+    for err in errs:
+        diagnostic = Diagnostic(
+            range=Range(Position(line=err.line, character=err.start),
+                        Position(line=err.line, character=err.end)),
+            message=err.description,
+            severity=DiagnosticSeverity.Error,
+            source="semprlsp"
+        )
+        dias.append(diagnostic)
+
+    return dias
+
+
 @server.feature(TEXT_DOCUMENT_DID_CHANGE)
 def did_change(ls, params: DidChangeTextDocumentParams):
-
-    print("hello??")
-
     text_doc = ls.workspace.get_document(params.textDocument.uri)
 
-    dias = []
+    rulestring = ""
     for i,l in enumerate(text_doc.lines):
-        print("hello?", i, l)
-        loc = l.find("error")
+        rulestring += l
 
-        if loc >= 0:
-            diagnostic = Diagnostic(
-                            range=Range(Position(line=i, character=loc),
-                                        Position(line=i, character=loc+5)),
-                            message="Found 'error'",
-                            severity=DiagnosticSeverity.Error,
-                            source="rules validation"
-                         )
-            dias.append(diagnostic)
-            print("found error")
-
+    dias = get_diagnostics(rulestring)
     ls.publish_diagnostics(text_doc.uri, dias)
+
+@server.feature(TEXT_DOCUMENT_DID_OPEN)
+def did_open(ls, params : DidOpenTextDocumentParams):
+    dias = get_diagnostics(params.textDocument.text)
+    ls.publish_diagnostics(params.textDocument.uri, dias)
 
 print("starting server")
 server.start_tcp('localhost', 8066)

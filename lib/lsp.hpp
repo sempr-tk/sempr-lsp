@@ -19,14 +19,17 @@ public:
         int line;
         int start, end;
         std::string description;
+        std::string toString() const;
     };
 
     RuleChecker();
     std::vector<Error> getErrors(const std::string& rules);
+    std::string lastDOT() const;
 
 
 private:
     Core core_;
+    std::string lastDOT_;
 };
 
 
