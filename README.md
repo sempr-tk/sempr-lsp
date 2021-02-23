@@ -4,7 +4,13 @@ sempr-lsp is a utility tool which can be used to parse text files and report
 diagnostic information. It uses the "language server protocol" which makes it
 usable in many different editors (vscode, vim, atom, ...).
 
+> **Note:** This package does not provide syntax highlighting.
+
+
+
 ![](img/example.gif)
+
+![](img/example-vscode.gif)
 
 
 ## Prerequisites

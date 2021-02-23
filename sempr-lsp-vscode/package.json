@@ -1,0 +1,43 @@
+{
+	"name": "sempr-lsp",
+	"description": "An extension to support the sempr-lsp server",
+	"author": "Nils Niemann",
+	"license": "BSD-3",
+	"version": "1.0.0",
+	"categories": [],
+	"engines": {
+		"vscode": "^1.43.0"
+	},
+	"activationEvents": [
+		"onLanguage:rules"
+	],
+	"main": "./client/out/extension",
+	"contributes": {
+        "languages": [
+            {
+                "id": "rules",
+                "extensions": [".rules"]
+            }
+        ],
+		"configuration": {
+			"type": "object",
+			"title": "Example configuration",
+			"properties": {
+			}
+		}
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -b",
+		"watch": "tsc -b -w",
+		"postinstall": "cd client && npm install && cd .."
+	},
+	"devDependencies": {
+		"@types/mocha": "^8.0.3",
+		"mocha": "^8.1.1",
+		"@types/node": "^12.12.0",
+		"eslint": "^6.4.0",
+		"@typescript-eslint/parser": "^2.3.0",
+		"typescript": "^4.0.2"
+	}
+}
