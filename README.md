@@ -6,6 +6,9 @@ usable in many different editors (vscode, vim, atom, ...).
 
 > **Note:** This package does not provide syntax highlighting.
 
+![](img/example.gif)
+
+![](img/example-vscode.gif)
 
 ## Prerequisites
 
@@ -49,7 +52,6 @@ protocol (lsp).
 
 ## VIM + YCM
 
-![](img/example.gif)
 
 `.vimrc:`
 
@@ -86,7 +88,6 @@ augroup END
 
 ## VSCODE
 
-![](img/example-vscode.gif)
 
 ```
 cp -r sempr-lsp-vscode ~/.vscode/extensions
