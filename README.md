@@ -7,12 +7,6 @@ usable in many different editors (vscode, vim, atom, ...).
 > **Note:** This package does not provide syntax highlighting.
 
 
-
-![](img/example.gif)
-
-![](img/example-vscode.gif)
-
-
 ## Prerequisites
 
 ```
@@ -50,15 +44,15 @@ specifying it on the `PYTHONPATH`:
 PYTHONPATH=. ../../server.py
 ```
 
-### Connecting to an editor
-
 Many editors support custom language servers that support the language server
 protocol (lsp).
 
-#### VIM + YCM
+## VIM + YCM
 
+![](img/example.gif)
 
 `.vimrc:`
+
 ```vim
 " enable custom language server for ycmd
 let g:ycm_language_server =
@@ -90,3 +84,15 @@ augroup filetypedetect
 augroup END
 ```
 
+## VSCODE
+
+![](img/example-vscode.gif)
+
+```
+cp -r sempr-lsp-vscode ~/.vscode/extensions
+cd ~/.vscode/extensions/sempr-lsp-vscode
+npm install
+npm run compile
+```
+
+Make sure to start the `server.py` **before** running vscode! I have not yet figured out how to spawn the server from the vscode extension, and the client will only try to connect to the server a few times.
