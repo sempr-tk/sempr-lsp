@@ -26,6 +26,8 @@ public:
     std::vector<Error> getErrors(const std::string& rules);
     std::string lastDOT() const;
 
+    std::vector<std::string> listConditions() const;
+    std::vector<std::string> listEffects() const;
 
 private:
     Core core_;

@@ -12,13 +12,17 @@ import sys
 ruleChecker = semprlsp.RuleChecker()
 server = LanguageServer()
 
-@server.feature(COMPLETION, trigger_characters=[','])
+conditionsAndEffects = set()
+for c in ruleChecker.listConditions():
+    conditionsAndEffects.add(c)
+for e in ruleChecker.listEffects():
+    conditionsAndEffects.add(e)
+completionItems = [CompletionItem(i, kind=CompletionItemKind.Function) for i in conditionsAndEffects]
+
+@server.feature(COMPLETION, trigger_characters=[])
 def completions(params: CompletionParams):
-    return CompletionList(False, [
-        CompletionItem('Item1'),
-        CompletionItem('Item2'),
-        CompletionItem('Item3')
-    ])
+
+    return CompletionList(False, completionItems);
 
 
 

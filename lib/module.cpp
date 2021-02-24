@@ -20,6 +20,8 @@ PYBIND11_MODULE(semprlsp, m)
     py::class_<::sempr::RuleChecker>(m, "RuleChecker")
         .def(py::init<>())
         .def("getErrors", &::sempr::RuleChecker::getErrors)
-        .def("lastDOT", &::sempr::RuleChecker::lastDOT);
+        .def("lastDOT", &::sempr::RuleChecker::lastDOT)
+        .def("listConditions", &::sempr::RuleChecker::listConditions)
+        .def("listEffects", &::sempr::RuleChecker::listEffects);
 }
 

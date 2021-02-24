@@ -28,13 +28,24 @@ std::string RuleChecker::lastDOT() const
     return lastDOT_;
 }
 
+
+std::vector<std::string> RuleChecker::listConditions() const
+{
+    return const_cast<Core&>(core_).parser().listAvailableConditions();
+}
+
+std::vector<std::string> RuleChecker::listEffects() const
+{
+    return const_cast<Core&>(core_).parser().listAvailableEffects();
+}
+
+
 std::vector<RuleChecker::Error> RuleChecker::getErrors(const std::string& rules)
 {
     std::vector<RuleChecker::Error> errs;
 
     try {
         auto parsed = core_.addRules(rules);
-        std::ofstream("sempr_lsp_last_check.dot") << core_.reasoner().net().toDot();
         lastDOT_ = core_.reasoner().net().toDot();
 
         for (auto rule : parsed)
