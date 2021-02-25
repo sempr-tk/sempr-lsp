@@ -44,14 +44,14 @@ std::vector<RuleChecker::Error> RuleChecker::getErrors(const std::string& rules)
 {
     std::vector<RuleChecker::Error> errs;
 
-    try {
-        auto parsed = core_.addRules(rules);
-        lastDOT_ = core_.reasoner().net().toDot();
+    std::vector<size_t> parsed;
 
-        for (auto rule : parsed)
-        {
-            core_.removeRule(rule);
-        }
+    try {
+        parsed = core_.addRules(rules);
+        core_.reasoner().performInference(10);
+
+        lastDOT_ = core_.reasoner().net().toDot();
+        std::ofstream("lsp_last.dot") << lastDOT_;
 
     } catch (rete::ParserExceptionLocalized& e) {
         RuleChecker::Error err;
@@ -107,8 +107,24 @@ std::vector<RuleChecker::Error> RuleChecker::getErrors(const std::string& rules)
 
     } catch (std::exception& e) {
         std::cerr << "uncaught exception: " << e.what() << std::endl;
+
+        RuleChecker::Error err;
+        err.line = 0;
+        err.start = 0;
+        err.end = 0;
+        err.description = std::string("uncaught exception: \n") + e.what();
+
+        errs.push_back(err);
     }
 
+    // cleanup
+    for (auto rule : parsed)
+    {
+        core_.removeRule(rule);
+    }
+    core_.reasoner().performInference();
+
+    // return result
     return errs;
 }
 
