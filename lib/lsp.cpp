@@ -48,10 +48,10 @@ std::vector<RuleChecker::Error> RuleChecker::getErrors(const std::string& rules)
 
     try {
         parsed = core_.addRules(rules);
-        core_.reasoner().performInference(10);
+//        core_.reasoner().performInference(1000);
 
         lastDOT_ = core_.reasoner().net().toDot();
-        std::ofstream("lsp_last.dot") << lastDOT_;
+//        std::ofstream("lsp_last.dot") << lastDOT_;
 
     } catch (rete::ParserExceptionLocalized& e) {
         RuleChecker::Error err;
