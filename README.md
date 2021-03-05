@@ -4,11 +4,15 @@ sempr-lsp is a utility tool which can be used to parse text files and report
 diagnostic information. It uses the "language server protocol" which makes it
 usable in many different editors (vscode, vim, atom, ...).
 
-> **Note:** This package does not provide syntax highlighting.
+
 
 ![](img/example.gif)
 
 ![](img/example-vscode.gif)
+
+> _**NOTE:** By now, this package also provides syntax highlighting in vscode - and probably other editors which support textmate grammars. I just did not update the above images, but have a look below. :)_
+
+![example-vscode-syntax](img/example-vscode-syntax.gif)
 
 ## Prerequisites
 

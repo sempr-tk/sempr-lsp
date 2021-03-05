@@ -1,0 +1,209 @@
+{
+    "scopeName": "source.rules",
+    "patterns": [
+        {"include" : "#prefix-def"},
+        {"include" : "#constant-def"},
+        {"include": "#comment"},
+        {"include": "#rule"}
+    ],
+
+    "repository" : {
+        "comment" : {
+            "match": "#.*$",
+            "name": "comment.line.number-sign"
+        },
+        "prefix-def" : {
+            "match" : "(override )?(@PREFIX) (\\w+)(:) (<)([^<>\"{}|^`\\\\]+)(>)",
+            "captures" : {
+                "0" : { "name" : "source.rules.prefix-def"},
+                "1" : { "name" : "storage.modifier" },
+                "2" : { "name" : "storage.type"},
+                "3" : { "name" : "entity.name.type"},
+                "4" : { "name" : "punctuation.separator"},
+                "5" : { "name" : "punctuation.definition.generic.begin"},
+                "6" : { "name" : "string.unquoted"},
+                "7" : { "name" : "punctuation.definition.generic.end"}
+            }
+        },
+        "constant-def" : {
+            "begin" : "(override )?(\\$\\w+) (:)",
+            "beginCaptures" : {
+                "1" : { "name" : "storage.modifier" },
+                "2" : { "name" : "entity.name.constant" },
+                "3" : { "name" : "punctuation.separator" }
+            },
+            "end" : "$",
+            "name" : "source.rules.constant-def",
+            "patterns" : [
+                { "include" : "#argument-const" },
+                { "include" : "#comment" }
+            ]
+        },
+        "rule": {
+            "begin": "(\\[)(.*:)?",
+            "end": "\\]",
+            "beginCaptures" : {
+                "1" : { "name": "punctuation.section.brackets.begin" },
+                "2" : { "name": "entity.name.class"}
+            },
+            "endCaptures" : {
+                "0" : {"name": "punctuation.section.brackets.end" }
+            },
+            "name": "source.rules.rule",
+            "patterns" : [
+                {"include": "#comment"},
+                {"include": "#effects"},
+                {"include": "#all-conditions-of-a-rule"}
+            ]
+        },
+        "quotedstring": {
+            "begin": "\"",
+            "end": "\"",
+            "name": "string.quoted.double",
+            "patterns" : [
+                {
+                    "match" : "\\\\\"",
+                    "name" : "constant.character.escape"
+                }
+            ]
+        },
+        "fulluri": {
+            "match" : "(<)(.*?)(>)",
+            "captures" : {
+                "1" : { "name" : "punctuation.section.braces.begin" },
+                "2" : { "name" : "entity.name.tag" },
+                "3" : { "name" : "punctuation.section.braces.end" }
+            }
+        },
+        "shorturi": {
+            "match" : "(\\w*?)(:)(\\w+)",
+            "captures" : {
+                "1" : { "name" : "entity.name.type" },
+                "2" : { "name" : "punctuation.separator" },
+                "3" : { "name" : "constant.other" }
+            }
+        },
+        "number" : {
+            "match" : "[+-]?\\d+((\\.\\d+)([eE]{1}[+-]?\\d+)?)?",
+            "name" : "constant.numeric"
+        },
+        "variable" : {
+            "match" : "\\?\\w+",
+            "name" : "variable.other"
+        },
+        "constant-ref" : {
+            "match" : "\\$\\w+",
+            "name" : "entity.name.constant"
+        },
+        "argument-const": {
+            "patterns": [
+                {"include" : "#quotedstring"},
+                {"include" : "#fulluri"},
+                {"include" : "#shorturi"},
+                {"include" : "#number"},
+                {"include" : "#constant-ref"}
+            ]
+        },
+        "argument": {
+            "patterns": [
+                {"include" : "#argument-const"},
+                {"include" : "#variable"}
+            ]
+        },
+        "shorthand-triple": {
+            "begin": "\\(",
+            "beginCaptures": {
+                "0" : {"name" : "punctuation.section.braces.begin"}
+            },
+            "end": "\\)",
+            "endCaptures" : {
+                "0" : { "name" : "punctuation.section.braces.end"}
+            },
+            "patterns" : [
+                {"include": "#argument"}
+            ],
+            "name": "source.rules.shorthandtriple"
+        },
+        "named-part": {
+            "begin" : "((\\w+)(:))?(\\w+)((<)(\\w+)(>))?(\\()",
+            "beginCaptures" : {
+                "2" : { "name" : "support.class" },
+                "3" : { "name" : "punctuation.separator" },
+                "4" : { "name" : "support.function"},
+                "5" : { "name" : "punctuation.definition.generic.begin" },
+                "7" : { "name" : "support.type" },
+                "8" : { "name" : "punctuation.definition.generic.end" },
+                "9" : { "name" : "punctuation.section.braces.begin" }
+            },
+            "end" : "\\)",
+            "endCaptures" : {
+                "0" : { "name" : "punctuation.section.braces.end" }
+            },
+            "name" : "source.rules.rule.named-part",
+            "patterns" : [
+                { "include" : "#argument" }
+            ]
+        },
+        "group-by": {
+            "begin" : "(GROUP BY) \\(",
+            "beginCaptures" : {
+                "1" : { "name" : "keyword.control"}
+            },
+            "end" : "\\)",
+            "patterns" : [
+                { "include" : "#variable" }
+            ]
+        },
+        "noValue" : {
+            "begin" : "(noValue) ({)",
+            "beginCaptures" : {
+                "1" : { "name" : "keyword.control.conditional" },
+                "2" : { "name" : "punctuation.section.brackets.begin" }
+            },
+            "end" : "(})",
+            "endCaptures" : {
+                "0" : { "name" : "punctuation.section.brackets.end" }
+            },
+            "name" : "source.rules.rule.conditions.noValue",
+            "patterns" : [
+                { "include" : "#conditions" }
+            ]
+        },
+        "effects": {
+            "begin" : "->",
+            "end" : "(?=\\])",
+            "beginCaptures" : {
+                "0" : { "name" : "keyword.control" }
+            },
+            "name" : "source.rules.rule.effects",
+            "patterns": [
+                {"include": "#comment"},
+                {"include": "#shorthand-triple"},
+                { "include" : "#named-part" }
+            ]
+        },
+        "conditions": {
+            "patterns" : [
+                { "include" : "#comment" },
+                { "include" : "#shorthand-triple" },
+                { "include" : "#named-part" },
+                { "include" : "#group-by" },
+                { "include" : "#noValue" }
+            ]
+        },
+        "all-conditions-of-a-rule" : {
+            "begin" : "",
+            "end" : "(?=->)",
+            "endCaptures": {
+                "0" : { "name" : "source.rules.rule.conditionEffectDelim" }
+            },
+            "name": "source.rules.rule.conditions",
+            "patterns" : [
+                { "include" : "#conditions" }
+            ]
+        }
+        
+
+    }
+
+}

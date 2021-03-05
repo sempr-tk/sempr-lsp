@@ -13,17 +13,25 @@
 	],
 	"main": "./client/out/extension",
 	"contributes": {
-        "languages": [
+		"languages": [
+			{
+				"id": "rules",
+				"extensions": [
+					".rules"
+				]
+			}
+		],
+        "grammars": [
             {
-                "id": "rules",
-                "extensions": [".rules"]
+                "language": "rules",
+                "scopeName": "source.rules",
+                "path": "./syntaxes/rules.tmGrammar.json"
             }
         ],
 		"configuration": {
 			"type": "object",
 			"title": "Example configuration",
-			"properties": {
-			}
+			"properties": {}
 		}
 	},
 	"scripts": {
